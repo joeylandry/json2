@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .product-list {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .product-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        .product-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+        .product-price {
+            color: #009688;
+            font-weight: bold;
+        }
+        .product-categories {
+            color: #777;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <div class="product-list" id="productDisplay">Loading products...</div>
+
+    <script>
+        $(document).ready(function() {
+            $.get("products.json", function(data) {
+                let displayContent = "";
+
+                // Check if data is an array
+                if (Array.isArray(data)) {
+                    data.forEach(product => {
+                        // Check if each product has expected fields
+                        if (product.name && product.description && product.price && product.categories) {
+                            displayContent += `
+                                <div class="product-item">
+                                    <div class="product-name">${product.name}</div>
+                                    <div>${product.description}</div>
+                                    <div class="product-price">Price: $${product.price.toFixed(2)}</div>
+                                    <div class="product-categories">Categories: ${product.categories.join(", ")}</div>
+                                </div>
+                            `;
+                        }
+                    });
+                } else {
+                    displayContent = "Error: Data format is not as expected.";
+                }
+
+                // Display the content or error message
+                document.getElementById("productDisplay").innerHTML = displayContent;
+            }).fail(function() {
+                document.getElementById("productDisplay").innerHTML = "Error loading products. Please check the JSON file path.";
+            });
+        });
+    </script>
+</body>
+</html>
