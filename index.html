@@ -49,34 +49,19 @@
     <div class="product-list" id="productDisplay">Loading products...</div>
 
     <script>
-        $(document).ready(function() {
-            $.get("products.json", function(data) {
-                let displayContent = "";
-
-                // Check if data is an array
-                if (Array.isArray(data)) {
-                    data.forEach(product => {
-                        // Check if each product has expected fields
-                        if (product.name && product.description && product.price && product.categories) {
-                            displayContent += `
-                                <div class="product-item">
-                                    <div class="product-name">${product.name}</div>
-                                    <div>${product.description}</div>
-                                    <div class="product-price">Price: $${product.price.toFixed(2)}</div>
-                                    <div class="product-categories">Categories: ${product.categories.join(", ")}</div>
-                                </div>
-                            `;
-                        }
-                    });
-                } else {
-                    displayContent = "Error: Data format is not as expected.";
-                }
-
-                // Display the content or error message
-                document.getElementById("productDisplay").innerHTML = displayContent;
-            }).fail(function() {
-                document.getElementById("productDisplay").innerHTML = "Error loading products. Please check the JSON file path.";
+        $.get("products.json", function(data) {
+            let displayContent = "";
+            data.forEach(product => {
+                displayContent += `
+                    <div class="product-item">
+                        <div class="product-name">${product.name}</div>
+                        <div>${product.description}</div>
+                        <div class="product-price">Price: $${product.price}</div>
+                        <div class="product-categories">Categories: ${product.categories.join(", ")}</div>
+                    </div>
+                `;
             });
+            document.getElementById("productDisplay").innerHTML = displayContent;
         });
     </script>
 </body>
